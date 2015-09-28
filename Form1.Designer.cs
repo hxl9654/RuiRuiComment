@@ -1,6 +1,6 @@
-﻿namespace BarrageComment
+﻿namespace RuiRuiComment
 {
-    partial class BarrageComment
+    partial class RuiRuiComment
     {
         /// <summary>
         /// 必需的设计器变量。

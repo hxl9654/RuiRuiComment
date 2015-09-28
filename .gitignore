@@ -44,3 +44,5 @@ Temporary Items
 .apdisk
 *.exe
 *.pdb
+*.suo
+.vs/BarrageComment/v14/.suo
