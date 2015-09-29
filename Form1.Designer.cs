@@ -43,7 +43,7 @@
             this.timer2.Interval = 10000;
             this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
             // 
-            // BarrageComment
+            // RuiRuiComment
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(20F, 42F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -56,7 +56,7 @@
             this.Margin = new System.Windows.Forms.Padding(10);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "BarrageComment";
+            this.Name = "RuiRuiComment";
             this.Opacity = 0.8D;
             this.ShowIcon = false;
             this.Text = "BarrageComment";
