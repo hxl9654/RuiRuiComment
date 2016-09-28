@@ -33,6 +33,8 @@ namespace RuiRuiComment
     {
         Label[] label = new Label[100];
         string qunnum = "";
+        string qname = "", qowner = "";
+        string qno = "";
         public RuiRuiComment()
         {
             InitializeComponent();
@@ -42,8 +44,13 @@ namespace RuiRuiComment
         {
             this.Width = Screen.PrimaryScreen.Bounds.Width;
             this.Height = Screen.PrimaryScreen.Bounds.Height;
-            while (qunnum.Equals(""))
-                qunnum = Interaction.InputBox("请输入群号", "请输入群号", "", 100, 100);
+            while (qname.Equals(""))
+                qname = Interaction.InputBox("请准确地输入群名", "请准确地输入群名", "", 100, 100);
+            while (qowner.Equals(""))
+                qowner = Interaction.InputBox("请准确地输入群主QQ号", "请准确地输入群主QQ号", "", 100, 100);
+            while (qno.Equals(""))
+                qno = Interaction.InputBox("请准确地输入群号", "请准确地输入群号", "", 100, 100);
+            qunnum = qowner + qname;
             for (int i = 0; i < 10; i++)
             {
                 label[i] = new Label();
@@ -54,7 +61,7 @@ namespace RuiRuiComment
             }
             Label l = new Label();
             l.AutoSize = true;
-            l.Text = "在群" + qunnum + "内发送“弹幕＆你想说的话”即可参与互动！";
+            l.Text = "在群 " + qno + " 内发送“弹幕＆你想说的话”即可参与互动！";
             l.Location = new Point(200, 650);
             Controls.Add(l);
             Label m = new Label();
