@@ -35,7 +35,7 @@ namespace RuiRuiComment
         Dictionary<string, LabelClass> labels = new Dictionary<string, LabelClass>();
         string qunnum = "";
         string qname = "", qowner = "";
-        string qno = "";
+        //string qno = "";
 
         Random randr = new Random((int)(DateTime.Now.Ticks + 246656752));
         Random randg = new Random((int)(DateTime.Now.Ticks + 735237307));
@@ -54,14 +54,14 @@ namespace RuiRuiComment
                 qname = Interaction.InputBox("请准确地输入群名", "请准确地输入群名", "", 100, 100);
             while (qowner.Equals(""))
                 qowner = Interaction.InputBox("请准确地输入群主QQ号", "请准确地输入群主QQ号", "", 100, 100);
-            while (qno.Equals(""))
-                qno = Interaction.InputBox("请准确地输入群号", "请准确地输入群号", "", 100, 100);
+            //while (qno.Equals(""))
+            //    qno = Interaction.InputBox("请准确地输入群号", "请准确地输入群号", "", 100, 100);
             qunnum = qowner + qname;
 
             Label l = new Label();
             l.AutoSize = true;
-            l.Text = "在群 " + qno + " 内发送“弹幕＆你想说的话”即可参与互动！";
-            l.Location = new Point(Screen.PrimaryScreen.Bounds.Width / 2 - 470, Screen.PrimaryScreen.Bounds.Height - 100);
+            l.Text = "在群 " + qname + " 内发送“弹幕＆你想说的话”即可参与互动！";
+            l.Location = new Point(Screen.PrimaryScreen.Bounds.Width / 2 - 550, Screen.PrimaryScreen.Bounds.Height - 100);
             Controls.Add(l);
             Label m = new Label();
             m.AutoSize = true;
@@ -80,7 +80,11 @@ namespace RuiRuiComment
             foreach (var labelClass in labels)
             {
                 if (labelClass.Value == null || labelClass.Value.times == 0)
+                {
+                    //if (labelClass.Key != null)
+                    //    labels.Remove(labelClass.Key);
                     continue;
+                }
                 if (labelClass.Value.label.Text == "")
                 {
                     labelClass.Value.label.Location = new Point(Screen.PrimaryScreen.Bounds.Width, labelClass.Value.label.Location.Y);
@@ -90,6 +94,7 @@ namespace RuiRuiComment
                 if (labelClass.Value.label.Location.X < -labelClass.Value.label.Width)
                 {
                     //labelClass.Value.label.Location = new Point(Screen.PrimaryScreen.Bounds.Width, labelClass.Value.label.Location.Y);
+                    labelClass.Value.label.ForeColor = Color.FromArgb(randr.Next(255), randg.Next(255), randb.Next(255));
                     labelClass.Value.label.Location = new Point(Screen.PrimaryScreen.Bounds.Width, randx.Next(1, (Screen.PrimaryScreen.Bounds.Height / 50) - 2) * 50);
                     labelClass.Value.times--;
                 }
@@ -101,13 +106,15 @@ namespace RuiRuiComment
             string url = "https://ruirui.hxlxz.com/getcomment.php?qunnum=" + qunnum;
             string temp = SmartQQ.HTTP.HttpGet(url);
             string[] tmp = temp.Split('★');
-            for (int i = 0; i < 10 && i < tmp.Length; i++)
+            for (int i = 0; i < tmp.Length; i++)
             {
                 if (tmp[i] == null)
                     break;
+                tmp[i] = tmp[i].Replace(Environment.NewLine, " ");
+                tmp[i] = tmp[i].Replace("\n", " ");
+                tmp[i] = tmp[i].Replace("\r", " ");
                 if (!labels.ContainsKey(tmp[i]))
                 {
-
                     Label label = new Label();
                     label.ForeColor = Color.FromArgb(randr.Next(255), randg.Next(255), randb.Next(255));
                     label.Location = new Point(Screen.PrimaryScreen.Bounds.Width, randx.Next(1, (Screen.PrimaryScreen.Bounds.Height / 50) - 2) * 50);
