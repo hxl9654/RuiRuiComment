@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.VisualBasic;
+using System.Threading;
 // *   This program is free software: you can redistribute it and/or modify
 // *   it under the terms of the GNU General Public License as published by
 // *   the Free Software Foundation, either version 3 of the License, or
@@ -31,10 +32,15 @@ namespace RuiRuiComment
 {
     public partial class RuiRuiComment : Form
     {
-        Label[] label = new Label[100];
+        Dictionary<string, LabelClass> labels = new Dictionary<string, LabelClass>();
         string qunnum = "";
         string qname = "", qowner = "";
         string qno = "";
+
+        Random randr = new Random((int)(DateTime.Now.Ticks + 246656752));
+        Random randg = new Random((int)(DateTime.Now.Ticks + 735237307));
+        Random randb = new Random((int)(DateTime.Now.Ticks + 300259300));
+        Random randx = new Random((int)(DateTime.Now.Ticks + 864248988));
         public RuiRuiComment()
         {
             InitializeComponent();
@@ -51,24 +57,17 @@ namespace RuiRuiComment
             while (qno.Equals(""))
                 qno = Interaction.InputBox("请准确地输入群号", "请准确地输入群号", "", 100, 100);
             qunnum = qowner + qname;
-            for (int i = 0; i < 10; i++)
-            {
-                label[i] = new Label();
-                label[i].Text = "";
-                label[i].Location = new Point(Screen.PrimaryScreen.Bounds.Width, i * 40 + 150);
-                label[i].AutoSize = true;
-                Controls.Add(label[i]);
-            }
+
             Label l = new Label();
             l.AutoSize = true;
             l.Text = "在群 " + qno + " 内发送“弹幕＆你想说的话”即可参与互动！";
-            l.Location = new Point(200, 650);
+            l.Location = new Point(Screen.PrimaryScreen.Bounds.Width / 2 - 470, Screen.PrimaryScreen.Bounds.Height - 100);
             Controls.Add(l);
             Label m = new Label();
             m.AutoSize = true;
             m.Text = "By何相龙 基于RuiRuiRobot 群137777833 https://github.com/hxl9654/RuiRuiComment";
             m.Font = new Font("SimSun", 15);
-            m.Location = new Point(200, 700);
+            m.Location = new Point(Screen.PrimaryScreen.Bounds.Width / 2 - 400, Screen.PrimaryScreen.Bounds.Height - 50);
             Controls.Add(m);
             timer1.Enabled = true;
             timer1.Start();
@@ -78,18 +77,22 @@ namespace RuiRuiComment
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            for (int i = 0; i < 10; i++)
+            foreach (var labelClass in labels)
             {
-                if (label[i] == null)
-                    break;
-                if (label[i].Text == "")
+                if (labelClass.Value == null || labelClass.Value.times == 0)
+                    continue;
+                if (labelClass.Value.label.Text == "")
                 {
-                    label[i].Location = new Point(Screen.PrimaryScreen.Bounds.Width, label[i].Location.Y);
+                    labelClass.Value.label.Location = new Point(Screen.PrimaryScreen.Bounds.Width, labelClass.Value.label.Location.Y);
                     continue;
                 }
-                label[i].Location = new Point(label[i].Location.X - (label[i].Width + Screen.PrimaryScreen.Bounds.Width) / 1000, label[i].Location.Y);
-                if (label[i].Location.X < -label[i].Width)
-                    label[i].Location = new Point(Screen.PrimaryScreen.Bounds.Width, label[i].Location.Y);
+                labelClass.Value.label.Location = new Point(labelClass.Value.label.Location.X - (labelClass.Value.label.Width + Screen.PrimaryScreen.Bounds.Width) / 500, labelClass.Value.label.Location.Y);
+                if (labelClass.Value.label.Location.X < -labelClass.Value.label.Width)
+                {
+                    //labelClass.Value.label.Location = new Point(Screen.PrimaryScreen.Bounds.Width, labelClass.Value.label.Location.Y);
+                    labelClass.Value.label.Location = new Point(Screen.PrimaryScreen.Bounds.Width, randx.Next(1, (Screen.PrimaryScreen.Bounds.Height / 50) - 2) * 50);
+                    labelClass.Value.times--;
+                }
             }
         }
 
@@ -102,8 +105,27 @@ namespace RuiRuiComment
             {
                 if (tmp[i] == null)
                     break;
-                label[i].Text = tmp[i];
+                if (!labels.ContainsKey(tmp[i]))
+                {
+
+                    Label label = new Label();
+                    label.ForeColor = Color.FromArgb(randr.Next(255), randg.Next(255), randb.Next(255));
+                    label.Location = new Point(Screen.PrimaryScreen.Bounds.Width, randx.Next(1, (Screen.PrimaryScreen.Bounds.Height / 50) - 2) * 50);
+                    label.AutoSize = true;
+                    label.Text = tmp[i];
+                    LabelClass labelClass = new LabelClass();
+                    labelClass.label = label;
+                    labelClass.times = 5;
+                    labels.Add(tmp[i], labelClass);
+                    Controls.Add(labels[tmp[i]].label);
+                    Thread.Sleep(100);
+                }
             }
+        }
+        internal class LabelClass
+        {
+            public Label label;
+            public int times;
         }
     }
 }
